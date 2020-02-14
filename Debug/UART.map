@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker PC v18.12.3                    
 ******************************************************************************
->> Linked Fri Feb 14 19:10:54 2020
+>> Linked Fri Feb 14 20:41:24 2020
 
 OUTPUT FILE NAME:   <UART.out>
-ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00001c59
+ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00001ccd
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  00001cbc  0003e344  R  X
+  FLASH                 00000000   00040000  00001d0c  0003e2f4  R  X
   SRAM                  20000000   00008000  00000200  00007e00  RW X
 
 
@@ -19,9 +19,9 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00001cbc   00001cbc    r-x
+00000000    00000000    00001d0c   00001d0c    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00001a50   00001a50    r-x .text
+  0000026c    0000026c    00001aa0   00001aa0    r-x .text
 20000000    20000000    00000200   00000000    rw-
   20000000    20000000    00000200   00000000    rw- .stack
 
@@ -34,15 +34,15 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    00001a50     
+.text      0    0000026c    00001aa0     
                   0000026c    00001068     GPIO_DRV.obj (.text)
-                  000012d4    0000074c     UART.obj (.text)
-                  00001a20    00000238     LCD.obj (.text)
-                  00001c58    0000002c     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
-                  00001c84    00000024     main.obj (.text)
-                  00001ca8    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  00001cb4    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  00001cb8    00000004                                   : exit.c.obj (.text:abort:abort)
+                  000012d4    00000784     UART.obj (.text)
+                  00001a58    00000238     LCD.obj (.text)
+                  00001c90    0000003c     main.obj (.text)
+                  00001ccc    0000002c     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
+                  00001cf8    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  00001d04    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  00001d08    00000004                                   : exit.c.obj (.text:abort:abort)
 
 .cinit     0    00000000    00000000     UNINITIALIZED
 
@@ -59,12 +59,12 @@ MODULE SUMMARY
        ------                         ----   -------   -------
     .\
        GPIO_DRV.obj                   4200   0         0      
-       UART.obj                       1868   0         0      
+       UART.obj                       1924   0         0      
        tm4c123gh6pm_startup_ccs.obj   12     620       0      
        LCD.obj                        568    0         0      
-       main.obj                       36     0         0      
+       main.obj                       60     0         0      
     +--+------------------------------+------+---------+---------+
-       Total:                         6684   620       0      
+       Total:                         6764   620       0      
                                                               
     C:\ti\ccs920\ccs\tools\compiler\ti-cgt-arm_18.12.3.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
        boot_cortex_m.c.obj            44     0         0      
@@ -75,28 +75,29 @@ MODULE SUMMARY
                                                               
        Stack:                         0      0         512    
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   6736   620       512    
+       Grand Total:                   6816   620       512    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
 
 address   name                  
 -------   ----                  
-00001cb9  C$$EXIT               
+00001d09  C$$EXIT               
 00000739  GPIO_PIN_INIT         
 0000026d  GPIO_PORT_INIT        
 000011d5  GPIO_READ_PIN         
 00001159  GPIO_READ_PORT        
 00000ff5  GPIO_WRITE_PIN        
 00000f65  GPIO_WRITE_PORT       
-00001c1f  LCD_Send_Char         
-00001beb  LCD_Send_Command      
-00001b6d  LCD_Write_Nibble      
-00001a9d  LCD_init              
-00001ca9  ResetISR              
+00001c57  LCD_Send_Char         
+00001c23  LCD_Send_Command      
+00001ba5  LCD_Write_Nibble      
+00001ad5  LCD_init              
+00001cf9  ResetISR              
 000012d5  UART_Init             
 00001759  UART_Receive          
 000018d5  UART_Transmit         
+000019e1  UART_TransmitString   
 20000200  __STACK_END           
 00000200  __STACK_SIZE          
 20000200  __STACK_TOP           
@@ -108,14 +109,14 @@ ffffffff  __binit__
 ffffffff  __c_args__            
 UNDEFED   __mpu_init            
 20000000  __stack               
-00001c59  _c_int00_noinit_noargs
-00001a21  _delay_ms             
-00001a63  _delay_us             
-00001cb5  _system_pre_init      
-00001cb9  abort                 
+00001ccd  _c_int00_noinit_noargs
+00001a59  _delay_ms             
+00001a9b  _delay_us             
+00001d05  _system_pre_init      
+00001d09  abort                 
 ffffffff  binit                 
 00000000  g_pfnVectors          
-00001c85  main                  
+00001c91  main                  
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -134,18 +135,19 @@ address   name
 000012d5  UART_Init             
 00001759  UART_Receive          
 000018d5  UART_Transmit         
-00001a21  _delay_ms             
-00001a63  _delay_us             
-00001a9d  LCD_init              
-00001b6d  LCD_Write_Nibble      
-00001beb  LCD_Send_Command      
-00001c1f  LCD_Send_Char         
-00001c59  _c_int00_noinit_noargs
-00001c85  main                  
-00001ca9  ResetISR              
-00001cb5  _system_pre_init      
-00001cb9  C$$EXIT               
-00001cb9  abort                 
+000019e1  UART_TransmitString   
+00001a59  _delay_ms             
+00001a9b  _delay_us             
+00001ad5  LCD_init              
+00001ba5  LCD_Write_Nibble      
+00001c23  LCD_Send_Command      
+00001c57  LCD_Send_Char         
+00001c91  main                  
+00001ccd  _c_int00_noinit_noargs
+00001cf9  ResetISR              
+00001d05  _system_pre_init      
+00001d09  C$$EXIT               
+00001d09  abort                 
 20000000  __stack               
 20000200  __STACK_END           
 20000200  __STACK_TOP           
@@ -157,4 +159,4 @@ ffffffff  __c_args__
 ffffffff  binit                 
 UNDEFED   __mpu_init            
 
-[34 symbols]
+[35 symbols]

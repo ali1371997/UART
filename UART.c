@@ -370,10 +370,22 @@ void UART_Transmit(UART_N0_t uart, uint8 data)
             ; //wait utill buffer is not full
         UART6_DR = data;
     }
-    else if(uart == UART7)
+    else if (uart == UART7)
     {
-        while (GET_BIT(UART7_FR,5) == 1); //wait utill buffer is not full
+        while (GET_BIT(UART7_FR,5) == 1)
+            ; //wait utill buffer is not full
         UART7_DR = data;
     }
 
+}
+
+void UART_TransmitString(UART_N0_t uart, uint8 *arr)
+{
+    uint8 i = 0;
+
+    while (arr[i] != '\0')
+    {
+        UART_Transmit(uart, arr[i]);
+        i++;
+    }
 }

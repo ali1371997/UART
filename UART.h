@@ -37,6 +37,7 @@ data_8_bits
 void UART_Transmit(UART_N0_t uart,uint8 data);
 void UART_Init(UART_N0_t uart,f32 baud_rate);
 uint8 UART_Receive(UART_N0_t uart);
+void UART_TransmitString(UART_N0_t uart,uint8 *data);
 
 
 #endif /* UART_H_ */
