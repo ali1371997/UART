@@ -10,36 +10,42 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../GPIO_DRV.c \
+../LCD.c \
 ../UART.c \
 ../main.c \
 ../tm4c123gh6pm_startup_ccs.c 
 
 C_DEPS += \
 ./GPIO_DRV.d \
+./LCD.d \
 ./UART.d \
 ./main.d \
 ./tm4c123gh6pm_startup_ccs.d 
 
 OBJS += \
 ./GPIO_DRV.obj \
+./LCD.obj \
 ./UART.obj \
 ./main.obj \
 ./tm4c123gh6pm_startup_ccs.obj 
 
 OBJS__QUOTED += \
 "GPIO_DRV.obj" \
+"LCD.obj" \
 "UART.obj" \
 "main.obj" \
 "tm4c123gh6pm_startup_ccs.obj" 
 
 C_DEPS__QUOTED += \
 "GPIO_DRV.d" \
+"LCD.d" \
 "UART.d" \
 "main.d" \
 "tm4c123gh6pm_startup_ccs.d" 
 
 C_SRCS__QUOTED += \
 "../GPIO_DRV.c" \
+"../LCD.c" \
 "../UART.c" \
 "../main.c" \
 "../tm4c123gh6pm_startup_ccs.c" 

@@ -11,6 +11,7 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./GPIO_DRV.obj" \
+"./LCD.obj" \
 "./UART.obj" \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
@@ -157,8 +158,8 @@ UART.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "GPIO_DRV.obj" "UART.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" 
-	-$(RM) "GPIO_DRV.d" "UART.d" "main.d" "tm4c123gh6pm_startup_ccs.d" 
+	-$(RM) "GPIO_DRV.obj" "LCD.obj" "UART.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" 
+	-$(RM) "GPIO_DRV.d" "LCD.d" "UART.d" "main.d" "tm4c123gh6pm_startup_ccs.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -1,209 +1,245 @@
 #include"STD_TYPES.h"
 #include"Utils.h"
-#include"MEM_MAP.h"
+#include"RegMap.h"
 #include "GPIO_DRV.h"
+
+
+/*Function to initialize port and select direction and current*/
 void GPIO_PORT_INIT(GPIOPortID_t port, GPIODirection_t dir,
                     GPIOCurrent_t current)
 {
     switch (port)
     {
     case PA:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 0);
-        PORTADEN = 0xFF;
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PA);
+      //enable high bus
+        SET_BIT(GPIO_HBCTL, CTL_PA);
+
+        GPIO_PortADEN = 0xFF;
         switch (dir)
         {
-        case OUT:
-            PORTADIR = 0xFF;
+        case Out:
+            GPIO_PortADIR = 0xFF;
             if (current == I_2mA)
             {
-                PORTADR2R = 0xFF;
+                GPIO_PortADR2R = 0xFF;
             }
             else if (current == I_4mA)
             {
-                PORTADR4R = 0xFF;
+                GPIO_PortADR4R = 0xFF;
             }
             else
             {
-                PORTADR8R = 0xFF;
+                GPIO_PortADR8R = 0xFF;
             }
             break;
 
-        case INOPENDRAIN:
-            PORTADIR = 0x00;
-            PORTBODR = 0xFF;
-            break;
-        case INPULLUP:
-            PORTADIR = 0x00;
-            PORTAPUR = 0xFF;
+        case InFree:
+            GPIO_PortADIR = 0x00;
             break;
 
-        case INPULLDOWN:
-            PORTADIR = 0x00;
-            PORTAPDR = 0xFF;
+        case InOpenDrain:
+            GPIO_PortADIR = 0x00;
+            GPIO_PortBODR = 0xFF;
+            break;
+        case InPullUp:
+            GPIO_PortADIR = 0x00;
+            GPIO_PortAPUR = 0xFF;
+            break;
+
+        case InPullDown:
+            GPIO_PortADIR = 0x00;
+            GPIO_PortAPDR = 0xFF;
             break;
 
         }
         break;
 
     case PB:
-        SET_BIT(RCGCGPIO, 1);
-        PORTBDEN = 0xFF;
+        SET_BIT(GPIO_RCGC, CTL_PB);
+        //enable high bus
+        SET_BIT(GPIO_HBCTL, CTL_PB);
+
+        GPIO_PortBDEN = 0xFF;
 
         switch (dir)
         {
-        case OUT:
-            PORTBDIR = 0xFF;
+        case Out:
+            GPIO_PortBDIR = 0xFF;
             if (current == I_2mA)
             {
-                PORTBDR2R = 0xFF;
+                GPIO_PortBDR2R = 0xFF;
             }
             else if (current == I_4mA)
             {
-                PORTBDR4R = 0xFF;
+                GPIO_PortBDR4R = 0xFF;
             }
             else
             {
-                PORTBDR8R = 0xFF;
+                GPIO_PortBDR8R = 0xFF;
             }
             break;
 
-        case INOPENDRAIN:
-            PORTBDIR = 0x00;
-            PORTBODR = 0xFF;
-            break;
-        case INPULLUP:
-            PORTBDIR = 0x00;
-            PORTBPUR = 0xFF;
+        case InFree:
+            GPIO_PortBDIR = 0x00;
             break;
 
-        case INPULLDOWN:
-            PORTBDIR = 0x00;
-            PORTBPDR = 0xFF;
+        case InOpenDrain:
+            GPIO_PortBDIR = 0x00;
+            GPIO_PortBODR = 0xFF;
+            break;
+        case InPullUp:
+            GPIO_PortBDIR = 0x00;
+            GPIO_PortBPUR = 0xFF;
+            break;
+
+        case InPullDown:
+            GPIO_PortBDIR = 0x00;
+            GPIO_PortBPDR = 0xFF;
             break;
 
         }
         break;
 
     case PC:
-        SET_BIT(RCGCGPIO, 2);
+        SET_BIT(GPIO_RCGC, CTL_PC);
+        //enable high bus
+        SET_BIT(GPIO_HBCTL, CTL_PC);
 
         //unlock pin 0,1,3
-        PORTCLOCK = 0x4C4F434B;
-        PORTCCR = 0x0F; //(1) | (1 << 1) | (1 << 2) | (1 << 3);
+        GPIO_PortCLOCK = 0x4C4F434B;
+        GPIO_PortCCR = 0xFF; //(1) | (1 << 1) | (1 << 2) | (1 << 3);
 
-        PORTCDEN = 0xFF;
+        GPIO_PortCDEN = 0xFF;
         switch (dir)
         {
-        case OUT:
-            PORTCDIR = 0xFF;
+        case Out:
+            GPIO_PortCDIR = 0xFF;
             if (current == I_2mA)
             {
-                PORTCDR2R = 0xFF;
+                GPIO_PortCDR2R = 0xFF;
             }
             else if (current == I_4mA)
             {
-                PORTCDR4R = 0xFF;
+                GPIO_PortCDR4R = 0xFF;
             }
             else
             {
-                PORTCDR8R = 0xFF;
+                GPIO_PortCDR8R = 0xFF;
             }
             break;
-
-        case INOPENDRAIN:
-            PORTCDIR = 0x00;
-            PORTCODR = 0xFF;
-            break;
-        case INPULLUP:
-            PORTCDIR = 0x00;
-            PORTCPUR = 0xFF;
+            /*Port C Pins 0 ,1,2,and 3 will be always pulled up becuase of Jtag*/
+        case InFree:
+            GPIO_PortCDIR = 0x00;
             break;
 
-        case INPULLDOWN:
-            PORTCDIR = 0x00;
-            PORTCPDR = 0xFF;
+        case InOpenDrain:
+            GPIO_PortCDIR = 0x00;
+            GPIO_PortCODR = 0xF0;
+            break;
+        case InPullUp:
+            GPIO_PortCDIR = 0x00;
+            GPIO_PortCPUR = 0xFF;
+            break;
+
+        case InPullDown:
+            GPIO_PortCDIR = 0x00;
+            GPIO_PortCPDR = 0xF0;
             break;
 
         }
         break;
 
     case PD:
-        SET_BIT(RCGCGPIO, 3);
-        //unlock pin 7
-        PORTDLOCK = 0x4C4F434B;
-        PORTDCR = 0x80;
+        SET_BIT(GPIO_RCGC, CTL_PD);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PD);
 
-        PORTDDEN = 0xFF;
+        //unlock pin 7
+        GPIO_PortDLOCK = 0x4C4F434B;
+        SET_BIT(GPIO_PortDCR, 7);
+        GPIO_PortDDEN = 0xFF;
 
         switch (dir)
         {
-        case OUT:
-            PORTDDIR = 0xFF;
+        case Out:
+            GPIO_PortDDIR = 0xFF;
             if (current == I_2mA)
             {
-                PORTDDR2R = 0xFF;
+                GPIO_PortDDR2R = 0xFF;
             }
             else if (current == I_4mA)
             {
-                PORTDDR4R = 0xFF;
+                GPIO_PortDDR4R = 0xFF;
             }
             else
             {
-                PORTDDR8R = 0xFF;
+                GPIO_PortDDR8R = 0xFF;
             }
             break;
 
-        case INOPENDRAIN:
-            PORTDDIR = 0x00;
-            PORTDODR = 0xFF;
-            break;
-        case INPULLUP:
-            PORTDDIR = 0x00;
-            PORTDPUR = 0xFF;
+        case InFree:
+            GPIO_PortDDIR = 0x00;
             break;
 
-        case INPULLDOWN:
-            PORTDDIR = 0x00;
-            PORTDPDR = 0xFF;
+        case InOpenDrain:
+            GPIO_PortDDIR = 0x00;
+            GPIO_PortDODR = 0xFF;
+            break;
+        case InPullUp:
+            GPIO_PortDDIR = 0x00;
+            GPIO_PortDPUR = 0xFF;
+            break;
+
+        case InPullDown:
+            GPIO_PortDDIR = 0x00;
+            GPIO_PortDPDR = 0xFF;
             break;
 
         }
         break;
     case PE:
-        SET_BIT(RCGCGPIO, 4);
-        PORTEDEN = 0xFF;
+        SET_BIT(GPIO_RCGC, CTL_PE);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PE);
+
+        GPIO_PortEDEN = 0xFF;
 
         switch (dir)
         {
-        case OUT:
-            PORTEDIR = 0xFF;
+        case Out:
+            GPIO_PortEDIR = 0xFF;
             if (current == I_2mA)
             {
-                PORTEDR2R = 0xFF;
+                GPIO_PortEDR2R = 0xFF;
             }
             else if (current == I_4mA)
             {
-                PORTEDR4R = 0xFF;
+                GPIO_PortEDR4R = 0xFF;
             }
             else
             {
-                PORTEDR8R = 0xFF;
+                GPIO_PortEDR8R = 0xFF;
             }
             break;
 
-        case INOPENDRAIN:
-            PORTEDIR = 0x00;
-            PORTEODR = 0xFF;
-            break;
-        case INPULLUP:
-            PORTEDIR = 0x00;
-            PORTEPUR = 0xFF;
+        case InFree:
+            GPIO_PortEDIR = 0x00;
             break;
 
-        case INPULLDOWN:
-            PORTEDIR = 0x00;
-            PORTEPDR = 0xFF;
+        case InOpenDrain:
+            GPIO_PortEDIR = 0x00;
+            GPIO_PortEODR = 0xFF;
+            break;
+        case InPullUp:
+            GPIO_PortEDIR = 0x00;
+            GPIO_PortEPUR = 0xFF;
+            break;
+
+        case InPullDown:
+            GPIO_PortEDIR = 0x00;
+            GPIO_PortEPDR = 0xFF;
             break;
 
         }
@@ -211,43 +247,49 @@ void GPIO_PORT_INIT(GPIOPortID_t port, GPIODirection_t dir,
 
     case PF:
 
-        SET_BIT(RCGCGPIO, 5);
+        SET_BIT(GPIO_RCGC, CTL_PF);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PF);
+
 
         //unlock pin 0
-        PORTFLOCK = 0x4C4F434B;
-        PORTFCR = 0x01;
-
-        PORTFDEN = 0xFF;
+        GPIO_PortFLOCK = 0x4C4F434B;
+        SET_BIT(GPIO_PortFCR, 0);
+        GPIO_PortFDEN = 0xFF;
         switch (dir)
         {
-        case OUT:
-            PORTFDIR = 0xFF;
+        case Out:
+            GPIO_PortFDIR = 0xFF;
             if (current == I_2mA)
             {
-                PORTFDR2R = 0xFF;
+                GPIO_PortFDR2R = 0xFF;
             }
             else if (current == I_4mA)
             {
-                PORTFDR4R = 0xFF;
+                GPIO_PortFDR4R = 0xFF;
             }
             else
             {
-                PORTFDR8R = 0xFF;
+                GPIO_PortFDR8R = 0xFF;
             }
             break;
 
-        case INOPENDRAIN:
-            PORTFDIR = 0x00;
-            PORTFODR = 0xFF;
-            break;
-        case INPULLUP:
-            PORTFDIR = 0x00;
-            PORTFPUR = 0xFF;
+        case InFree:
+            GPIO_PortFDIR = 0x00;
             break;
 
-        case INPULLDOWN:
-            PORTFDIR = 0x00;
-            PORTFPDR = 0xFF;
+        case InOpenDrain:
+            GPIO_PortFDIR = 0x00;
+            GPIO_PortFODR = 0xFF;
+            break;
+        case InPullUp:
+            GPIO_PortFDIR = 0x00;
+            GPIO_PortFPUR = 0xFF;
+            break;
+
+        case InPullDown:
+            GPIO_PortFDIR = 0x00;
+            GPIO_PortFPDR = 0xFF;
             break;
 
         }
@@ -257,255 +299,324 @@ void GPIO_PORT_INIT(GPIOPortID_t port, GPIODirection_t dir,
 
 }
 
+
+
+
+/*Function to initialize pin and select direction and current*/
 void GPIO_PIN_INIT(GPIOPortID_t port, GPIOPinID_t pin, GPIODirection_t dir,
                    GPIOCurrent_t current)
 {
     switch (port)
     {
     case PA:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 0);
-        SET_BIT(PORTADEN, pin);
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PA);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PA);
+
+        SET_BIT(GPIO_PortADEN, pin);
         switch (dir)
         {
-        case OUT:
-            SET_BIT(PORTADIR, pin);
+        case Out:
+            SET_BIT(GPIO_PortADIR, pin);
             if (current == I_2mA)
             {
-                SET_BIT(PORTADR2R, pin);
+                SET_BIT(GPIO_PortADR2R, pin);
             }
             else if (current == I_4mA)
             {
-                SET_BIT(PORTADR4R, pin);
+                SET_BIT(GPIO_PortADR4R, pin);
 
             }
             else
             {
-                SET_BIT(PORTADR8R, pin);
+                SET_BIT(GPIO_PortADR8R, pin);
             }
             break;
 
-        case INOPENDRAIN:
-            CLR_BIT(PORTADIR, pin);
-            SET_BIT(PORTAODR, pin);
+        case InFree:
+            CLR_BIT(GPIO_PortADIR, pin);
             break;
-        case INPULLUP:
-            CLR_BIT(PORTADIR, pin);
-            SET_BIT(PORTAPUR, pin);
-        case INPULLDOWN:
-            CLR_BIT(PORTADIR, pin);
-            SET_BIT(PORTAPDR, pin);
+
+        case InOpenDrain:
+            CLR_BIT(GPIO_PortADIR, pin);
+            SET_BIT(GPIO_PortAODR, pin);
+            break;
+        case InPullUp:
+            CLR_BIT(GPIO_PortADIR, pin);
+            SET_BIT(GPIO_PortAPUR, pin);
+            break;
+        case InPullDown:
+            CLR_BIT(GPIO_PortADIR, pin);
+            SET_BIT(GPIO_PortAPDR, pin);
 
             break;
         }
         break;
     case PB:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 1);
-        SET_BIT(PORTBDEN, pin);
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PB);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PB);
+
+        SET_BIT(GPIO_PortBDEN, pin);
         switch (dir)
         {
-        case OUT:
-            SET_BIT(PORTBDIR, pin);
+        case Out:
+            SET_BIT(GPIO_PortBDIR, pin);
             if (current == I_2mA)
             {
-                SET_BIT(PORTBDR2R, pin);
+                SET_BIT(GPIO_PortBDR2R, pin);
             }
             else if (current == I_4mA)
             {
-                SET_BIT(PORTBDR4R, pin);
+                SET_BIT(GPIO_PortBDR4R, pin);
 
             }
             else
             {
-                SET_BIT(PORTBDR8R, pin);
+                SET_BIT(GPIO_PortBDR8R, pin);
             }
             break;
 
-        case INOPENDRAIN:
-            CLR_BIT(PORTBDIR, pin);
-            SET_BIT(PORTBODR, pin);
+        case InFree:
+            CLR_BIT(GPIO_PortBDIR, pin);
             break;
-        case INPULLUP:
-            CLR_BIT(PORTBDIR, pin);
-            SET_BIT(PORTBPUR, pin);
-        case INPULLDOWN:
-            CLR_BIT(PORTBDIR, pin);
-            SET_BIT(PORTBPDR, pin);
+
+        case InOpenDrain:
+            CLR_BIT(GPIO_PortBDIR, pin);
+            SET_BIT(GPIO_PortBODR, pin);
+            break;
+        case InPullUp:
+            CLR_BIT(GPIO_PortBDIR, pin);
+            SET_BIT(GPIO_PortBPUR, pin);
+            break;
+        case InPullDown:
+            CLR_BIT(GPIO_PortBDIR, pin);
+            SET_BIT(GPIO_PortBPDR, pin);
 
             break;
         }
         break;
 
     case PC:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 2);
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PC);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PC);
+
 
         if (pin == 0 | pin == 1 | pin == 2 | pin == 3)
         {
-            PORTCLOCK = 0x4C4F434B;
-            PORTCCR = 0X0F; //(1) | (1 << 1) | (1 << 2) | (1 << 3);
+            GPIO_PortCLOCK = 0x4C4F434B;
+            GPIO_PortCCR = 0XFF;  //(1) | (1 << 1) | (1 << 2) | (1 << 3);
 
         }
-        SET_BIT(PORTCDEN, pin);
+        SET_BIT(GPIO_PortCDEN, pin);
 
         switch (dir)
         {
-        case OUT:
-            SET_BIT(PORTCDIR, pin);
+        case Out:
+            SET_BIT(GPIO_PortCDIR, pin);
             if (current == I_2mA)
             {
-                SET_BIT(PORTCDR2R, pin);
+                SET_BIT(GPIO_PortCDR2R, pin);
             }
             else if (current == I_4mA)
             {
-                SET_BIT(PORTCDR4R, pin);
+                SET_BIT(GPIO_PortCDR4R, pin);
 
             }
             else
             {
-                SET_BIT(PORTCDR8R, pin);
+                SET_BIT(GPIO_PortCDR8R, pin);
             }
             break;
 
-        case INOPENDRAIN:
-            CLR_BIT(PORTCDIR, pin);
-            SET_BIT(PORTCODR, pin);
+        case InFree:
+            CLR_BIT(GPIO_PortCDIR, pin);
             break;
-        case INPULLUP:
-            CLR_BIT(PORTCDIR, pin);
-            SET_BIT(PORTCPUR, pin);
-        case INPULLDOWN:
-            CLR_BIT(PORTCDIR, pin);
-            SET_BIT(PORTCPDR, pin);
 
+        case InOpenDrain:
+            CLR_BIT(GPIO_PortCDIR, pin);
+
+            if (pin == 0 | pin == 1 | pin == 2 | pin == 3)
+            {
+
+            }
+            else
+            {
+                SET_BIT(GPIO_PortCODR, pin);
+            }
+            break;
+
+        case InPullUp:
+            CLR_BIT(GPIO_PortCDIR, pin);
+            SET_BIT(GPIO_PortCPUR, pin);
+            break;
+
+        case InPullDown:
+            CLR_BIT(GPIO_PortCDIR, pin);
+
+            if (pin == 0 | pin == 1 | pin == 2 | pin == 3)
+            {
+
+            }
+            else
+            {
+                SET_BIT(GPIO_PortCPDR, pin);
+            }
             break;
         }
         break;
 
     case PD:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 3);
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PD);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PD);
+
 
         if (pin == 7)
         {
 
-            PORTDLOCK = 0x4C4F434B;
-            PORTDCR = 0x80;
+            GPIO_PortDLOCK = 0x4C4F434B;
+            SET_BIT(GPIO_PortDCR, 7);
         }
-        SET_BIT(PORTDDEN, pin);
+
+        SET_BIT(GPIO_PortDDEN, pin);
         switch (dir)
         {
-        case OUT:
-            SET_BIT(PORTDDIR, pin);
+        case Out:
+            SET_BIT(GPIO_PortDDIR, pin);
             if (current == I_2mA)
             {
-                SET_BIT(PORTDDR2R, pin);
+                SET_BIT(GPIO_PortDDR2R, pin);
             }
             else if (current == I_4mA)
             {
-                SET_BIT(PORTDDR4R, pin);
+                SET_BIT(GPIO_PortDDR4R, pin);
 
             }
             else
             {
-                SET_BIT(PORTDDR8R, pin);
+                SET_BIT(GPIO_PortDDR8R, pin);
             }
             break;
 
-        case INOPENDRAIN:
-            CLR_BIT(PORTDDIR, pin);
-            SET_BIT(PORTDODR, pin);
+        case InFree:
+            CLR_BIT(GPIO_PortDDIR, pin);
             break;
-        case INPULLUP:
-            CLR_BIT(PORTDDIR, pin);
-            SET_BIT(PORTDPUR, pin);
-        case INPULLDOWN:
-            CLR_BIT(PORTDDIR, pin);
-            SET_BIT(PORTDPDR, pin);
+
+        case InOpenDrain:
+            CLR_BIT(GPIO_PortDDIR, pin);
+            SET_BIT(GPIO_PortDODR, pin);
+            break;
+        case InPullUp:
+            CLR_BIT(GPIO_PortDDIR, pin);
+            SET_BIT(GPIO_PortDPUR, pin);
+            break;
+        case InPullDown:
+            CLR_BIT(GPIO_PortDDIR, pin);
+            SET_BIT(GPIO_PortDPDR, pin);
 
             break;
         }
         break;
 
     case PE:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 4);
-        SET_BIT(PORTEDEN, pin);
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PE);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PE);
+
+        SET_BIT(GPIO_PortEDEN, pin);
         switch (dir)
         {
-        case OUT:
-            SET_BIT(PORTEDIR, pin);
+        case Out:
+            SET_BIT(GPIO_PortEDIR, pin);
             if (current == I_2mA)
             {
-                SET_BIT(PORTEDR2R, pin);
+                SET_BIT(GPIO_PortEDR2R, pin);
             }
             else if (current == I_4mA)
             {
-                SET_BIT(PORTEDR4R, pin);
+                SET_BIT(GPIO_PortEDR4R, pin);
 
             }
             else
             {
-                SET_BIT(PORTEDR8R, pin);
+                SET_BIT(GPIO_PortEDR8R, pin);
             }
             break;
 
-        case INOPENDRAIN:
-            CLR_BIT(PORTEDIR, pin);
-            SET_BIT(PORTEODR, pin);
+        case InFree:
+            CLR_BIT(GPIO_PortEDIR, pin);
             break;
-        case INPULLUP:
-            CLR_BIT(PORTEDIR, pin);
-            SET_BIT(PORTEPUR, pin);
-        case INPULLDOWN:
-            CLR_BIT(PORTEDIR, pin);
-            SET_BIT(PORTEPDR, pin);
+
+        case InOpenDrain:
+            CLR_BIT(GPIO_PortEDIR, pin);
+            SET_BIT(GPIO_PortEODR, pin);
+            break;
+        case InPullUp:
+            CLR_BIT(GPIO_PortEDIR, pin);
+            SET_BIT(GPIO_PortEPUR, pin);
+            break;
+        case InPullDown:
+            CLR_BIT(GPIO_PortEDIR, pin);
+            SET_BIT(GPIO_PortEPDR, pin);
 
             break;
         }
         break;
 
     case PF:
-        //enable clock for the port
-        SET_BIT(RCGCGPIO, 5);
+        //enable clock for the GPIO_Port
+        SET_BIT(GPIO_RCGC, CTL_PF);
+        //enable high bus
+          SET_BIT(GPIO_HBCTL, CTL_PF);
+
 
         if (pin == 0)
         {
 
-            PORTFLOCK = 0x4C4F434B;
-            PORTFCR = 0x01;
+            GPIO_PortFLOCK = 0x4C4F434B;
+            SET_BIT(GPIO_PortFCR, 0);
         }
-        SET_BIT(PORTFDEN, pin);
+        SET_BIT(GPIO_PortFDEN, pin);
         switch (dir)
         {
-        case OUT:
-            SET_BIT(PORTFDIR, pin);
+        case Out:
+            SET_BIT(GPIO_PortFDIR, pin);
             if (current == I_2mA)
             {
-                SET_BIT(PORTFDR2R, pin);
+                SET_BIT(GPIO_PortFDR2R, pin);
             }
             else if (current == I_4mA)
             {
-                SET_BIT(PORTFDR4R, pin);
+                SET_BIT(GPIO_PortFDR4R, pin);
 
             }
             else
             {
-                SET_BIT(PORTFDR8R, pin);
+                SET_BIT(GPIO_PortFDR8R, pin);
             }
             break;
-
-        case INOPENDRAIN:
-            CLR_BIT(PORTFDIR, pin);
-            SET_BIT(PORTFODR, pin);
+        case InFree:
+            CLR_BIT(GPIO_PortFDIR, pin);
             break;
-        case INPULLUP:
-            CLR_BIT(PORTFDIR, pin);
-            SET_BIT(PORTFPUR, pin);
-        case INPULLDOWN:
-            CLR_BIT(PORTFDIR, pin);
-            SET_BIT(PORTFPDR, pin);
+
+        case InOpenDrain:
+            CLR_BIT(GPIO_PortFDIR, pin);
+            SET_BIT(GPIO_PortFODR, pin);
+            break;
+        case InPullUp:
+            CLR_BIT(GPIO_PortFDIR, pin);
+            SET_BIT(GPIO_PortFPUR, pin);
+            break;
+        case InPullDown:
+            CLR_BIT(GPIO_PortFDIR, pin);
+            SET_BIT(GPIO_PortFPDR, pin);
 
             break;
         }
@@ -520,29 +631,30 @@ void GPIO_WRITE_PORT(GPIOPortID_t port, uint8 value)
     switch (port)
     {
     case PA:
-        PORTADAT = value;
+        GPIO_PortAData = value;
         break;
     case PB:
-        PORTBDAT = value;
+        GPIO_PortBData = value;
         break;
     case PC:
-        PORTCDAT = value;
+        GPIO_PortCData = value;
         break;
     case PD:
-        PORTDDAT = value;
+        GPIO_PortDData = value;
         break;
 
     case PE:
-        PORTEDAT = value;
+        GPIO_PortEData = value;
         break;
 
     case PF:
-        PORTFDAT = value;
+        GPIO_PortFData = value;
         break;
     }
 }
 
 void GPIO_WRITE_PIN(GPIOPortID_t port, GPIOPinID_t pin, uint8 value)
+
 {
 
     switch (port)
@@ -625,29 +737,30 @@ uint8 GPIO_READ_PORT(GPIOPortID_t port)
     switch (port)
     {
     case PA:
-        value = PORTADAT;
+        value = GPIO_PortAData;
         break;
     case PB:
-        value = PORTBDAT;
+        value = GPIO_PortBData;
         break;
     case PC:
-        value = PORTCDAT;
+        value = GPIO_PortCData;
         break;
     case PD:
-        value = PORTDDAT;
+        value = GPIO_PortDData;
         break;
 
     case PE:
-        value = PORTEDAT;
+        value = GPIO_PortEData;
         break;
 
     case PF:
-        value = PORTFDAT;
+        value = GPIO_PortFData;
         break;
     }
 
     return value;
 }
+
 uint8 GPIO_READ_PIN(GPIOPortID_t port, GPIOPinID_t pin)
 {
 
@@ -656,25 +769,25 @@ uint8 GPIO_READ_PIN(GPIOPortID_t port, GPIOPinID_t pin)
     switch (port)
     {
     case PA:
-        value = GET_BIT(PORTADAT, pin);
+        value = GET_BIT(GPIO_PortAData, pin);
         break;
 
     case PB:
-        value = GET_BIT(PORTBDAT, pin);
+        value = GET_BIT(GPIO_PortBData, pin);
         break;
 
     case PC:
-        value = GET_BIT(PORTCDAT, pin);
+        value = GET_BIT(GPIO_PortCData, pin);
         break;
 
     case PD:
-        value = GET_BIT(PORTDDAT, pin);
+        value = GET_BIT(GPIO_PortDData, pin);
         break;
     case PE:
-        value = GET_BIT(PORTEDAT, pin);
+        value = GET_BIT(GPIO_PortEData, pin);
         break;
     case PF:
-        value = GET_BIT(PORTFDAT, pin);
+        value = GET_BIT(GPIO_PortFData, pin);
         break;
     }
 

@@ -13,6 +13,17 @@
 
 #define HIGHV 1
 #define LOWV 0
+
+typedef enum
+{
+    CTL_PA=0,
+    CTL_PB,
+    CTL_PC,
+    CTL_PD,
+    CTL_PE,
+    CTL_PF
+}GPIOCTL_t;
+
 typedef enum
 {
     PA=0,
@@ -38,11 +49,11 @@ typedef enum
 
 typedef enum
 {
-    OUT=0,
-    INOPENDRAIN,
-    INPULLUP,
-    INPULLDOWN
-
+    Out=0,
+    InOpenDrain,
+    InPullUp,
+    InPullDown,
+    InFree
 }GPIODirection_t;
 
 typedef enum

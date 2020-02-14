@@ -1,1 +1,1 @@
-"./GPIO_DRV.obj" "./UART.obj" "./main.obj" "./tm4c123gh6pm_startup_ccs.obj" "../tm4c123gh6pm.cmd" -llibc.a 
+"./GPIO_DRV.obj" "./LCD.obj" "./UART.obj" "./main.obj" "./tm4c123gh6pm_startup_ccs.obj" "../tm4c123gh6pm.cmd" -llibc.a 

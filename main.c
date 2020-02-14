@@ -4,16 +4,8 @@
  */
 #include"STD_TYPES.h"
 #include"GPIO_DRV.h"
+#include"LCD.h"
 #include"UART.h"
-
-void _delay_ms(uint32 n)
-{
-    int i, j;
-    for (i = 0; i < n; i++)
-        for (j = 0; j < 3180; j++)
-        {
-        } /* do nothing for 1 ms */
-}
 
 
 
